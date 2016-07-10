@@ -1,32 +1,54 @@
 # jackal
 
-Jackal is a tool for visualizing fractal patterns
+Jackal is a tool for visualizing fractal patterns.
 
-## Installation
+## Overview
 
-Download from http://example.com/FIXME.
+FIXME: Write a paragraph about the library/project and highlight its goals.
 
-## Usage
+## Setup
 
-FIXME: explanation
+Most of the following scripts require [rlwrap](http://utopia.knoware.nl/~hlub/uck/rlwrap/) (on OS X installable via brew).
 
-    $ java -jar jackal-0.1.0-standalone.jar [args]
+Build your project once in dev mode with the following script and then open `index.html` in your browser.
 
-## Options
+    ./scripts/build
 
-FIXME: listing of options this app accepts.
+To auto build your project in dev mode:
 
-## Examples
+    ./scripts/watch
 
-...
+To start an auto-building Node REPL:
 
-### Bugs
+    ./scripts/repl
 
-...
+To get source map support in the Node REPL:
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+    lein npm install
+    
+To start a browser REPL:
+    
+1. Uncomment the following lines in src/jackal/core.cljs:
+```clojure
+;; (defonce conn
+;;   (repl/connect "http://localhost:9000/repl"))
+```
+2. Run `./scripts/brepl`
+3. Browse to `http://localhost:9000` (you should see `Hello world!` in the web console)
+4. (back to step 3) you should now see the REPL prompt: `cljs.user=>`
+5. You may now evaluate ClojureScript statements in the browser context.
+    
+For more info using the browser as a REPL environment, see
+[this](https://github.com/clojure/clojurescript/wiki/The-REPL-and-Evaluation-Environments#browser-as-evaluation-environment).
+    
+Clean project specific out:
+
+    lein clean
+     
+Build a single release artifact with the following script and then open `index_release.html` in your browser.
+
+    ./scripts/release
 
 ## License
 
+Distributed under the MIT License.

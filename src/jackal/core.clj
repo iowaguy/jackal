@@ -12,16 +12,22 @@
 
 (defn differentiate
   [func]
-  ())
+  (let [length (count func)]
+    (drop-last (map-indexed
+                (fn [index item] (* item (- (- length index) 1)))
+                func))))
 
 (defn differentiate-at
-  [x]
-  ())
+  [func x]
+  (eval-polynomial-at
+   (differentiate func)
+   x))
 
 (defn tangent-line-root
   [m b]
   (/ (- 0 b) m))
 
+;; needs refactoring to be more functional
 (defn eval-polynomial-at
   [poly x]
   (let [length (count poly)]
@@ -29,7 +35,6 @@
            sum 0]
       (if (> i 0)
         (do
-          (println sum)
           (recur
            (- i 1)
            (+

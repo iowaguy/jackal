@@ -9,3 +9,5 @@ pom.xml
 .lein-repl-history
 .lein-plugins/
 .repl*
+node_modules
+.cljs_node_repl/

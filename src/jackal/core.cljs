@@ -4,90 +4,61 @@
             [dommy.core :as dommy :refer-macros [sel1]]))
 
 (defonce conn
+  ;; (def env (browser/repl-env)) ;; create a new environment
+  ;; (repl/repl env) ;; start the REPL
   (repl/connect "http://localhost:9000/repl"))
 
 (enable-console-print!)
 
 ;; (def test-string (str "Newton's Method: " (numerics/newtons-method [1 0 -1] 10 0.0001)))
 
-;; (definterface IComplex
-;;   (^Number -real [this])
-;;   (^Number -imag [this]))
+(def canvas-dimension-x 2)
 
-(deftype complex [real imag]
-  IComplex
-  (-real [this] real)
-  (-imag [this] imag))
+(def canvas-dimension-y canvas-dimension-x)
 
-(defn plus [^complex z1 ^complex z2]
-  (let [x1 (.-real z1)
-        y1 (.-imag z1)
-        x2 (.-real z2)
-        y2 (.-imag z2)]
-    (complex. (+ x1 x2) (+ y1 y2))))
+(def scaling-factor 100)
 
-(defn times [^complex z1 ^complex z2]
-  (let [x1 (.-real z1)
-        y1 (.-imag z1)
-        x2 (.-real z2)
-        y2 (.-imag z2)]
-    (complex. (- (* x1 x2) (* y1 y2)) (+ (* x1 y2) (* y1 x2)))))
-
-(defn abs [^complex z]
-  (let [r (.-real z)
-        i (.-imag z)]
-    (.sqrt js/Math (.pow js/Math r 2) (.pow js/Math i 2))))
-
-(defn eval-quadratic-map
-  "Evaluate Mandlebrot term"
-  [z c]
-  (plus (times z z) c))
-
-(defn build-quadratic-map
-  "Evaluate Mandlebrot term"
-  [c]
-  (fn [z] (plus (times z z) c)))
-
-(defn mandelbrot-set-iterations
-   "Returns number of iterations of Mandelbrot procedure"
-   [real imaginary max-iter]
-   (let [quadratic-map (build-quadratic-map (complex. real imaginary))]
-     (loop [x 0
-            z (complex. 0 0)]
-       (if (and
-            (< x max-iter)
-            (< (abs z) 2))
-         (recur (inc x) (quadratic-map z))
-         max-iter))))
-
-(defn mandelbrot-set?
-  ([real imaginary]
-  (let [max-iter 10]
-    (mandelbrot-set? real imaginary max-iter)))
-  ([real imaginary max-iter]
-   (not (= (mandelbrot-set-iterations real imaginary max-iter) max-iter))))
+;; (def range-step-size (/ 1 scaling-factor))
+(def range-step-size 0.01)
 
 (defn add-canvas
   []
   (let [canvas-element (dommy/create-element :canvas)]
     (dommy/append!
      (sel1 :body)
-     (dommy/set-attr! canvas-element :id "fractal-canvas" :width 800 :height 800))))
+     (dommy/set-attr! canvas-element :id "fractal-canvas" :width 1000 :height 1000))))
+
+(defn make-dot
+  [ctx x y]
+  (.fillRect ctx (* scaling-factor x) (* scaling-factor y) 1 1))
+
+(defn pixel-coordinates
+  []
+  (for [x (range 0 canvas-dimension-x range-step-size)
+        y (range 0 canvas-dimension-y range-step-size)]
+    (list x y)))
+
+;; (def scaled-pixel-coordinates
+;;   (map
+;;    (fn [x y]
+;;      (do (println x y)
+;;          (list (/ x scaling-factor) (/ y scaling-factor))))
+;;    pixel-coordinates))
+
+(defn scaled-pixel-coordinates-in-set
+  []
+  (filter
+   (fn [[x y]] (numerics/mandelbrot-set? x y))
+   (pixel-coordinates)))
 
 (defn main
   []
   (add-canvas)
-  ;; (println (.-real (complex. 0 1)))
-  (println (mandelbrot-set? 1 1))
   (let [ctx (.getContext (sel1 :#fractal-canvas) "2d")]
-    (map
-     #(.fillRect ctx %1 %2 1 1)
-     (filter mandelbrot-set? (for [x (range 0 100) y (range 0 100)] (vector (/ x 100) (/ y 100))))))
-
-
-
-    ;; (doseq [x (range 0 800)]
-    ;;   (.fillRect ctx x x 1 1))))
+    (doall
+     (map
+      (fn [[a b]] (make-dot ctx a b))
+      (scaled-pixel-coordinates-in-set)))))
 
 
 (main)
@@ -97,3 +68,6 @@
       ;; (.moveTo ctx 0 0)
       ;; (.lineTo ctx 200 100)
       ;; (.stroke ctx)
+
+;; issue 1: Mandlebrot-set-iterations should break before hitting max-iter for diverging values
+;; issue 2: find way to handle scaling issues; need to iterate through a lot of numbers

@@ -1,5 +1,6 @@
 (ns jackal.math.numerics)
 
+;; Newton's Method functions
 (defn- y-intercept
   "Find the y-intercept of the line with slope m and coordinate (x,y)"
   [m x y]
@@ -47,6 +48,66 @@
   (eval-polynomial-at
    (differentiate func)
    x))
+
+;; Mandelbrot Set functions
+(deftype complex [real imag]
+  IComplex
+  (-real [this] real)
+  (-imag [this] imag))
+
+(defn- plus [^complex z1 ^complex z2]
+  (let [x1 (.-real z1)
+        y1 (.-imag z1)
+        x2 (.-real z2)
+        y2 (.-imag z2)]
+    (complex. (+ x1 x2) (+ y1 y2))))
+
+(defn- times [^complex z1 ^complex z2]
+  (let [x1 (.-real z1)
+        y1 (.-imag z1)
+        x2 (.-real z2)
+        y2 (.-imag z2)]
+    (complex. (- (* x1 x2) (* y1 y2)) (+ (* x1 y2) (* y1 x2)))))
+
+(defn- abs [^complex z]
+  (let [r (.-real z)
+        i (.-imag z)]
+    (.sqrt js/Math (+ (.pow js/Math r 2) (.pow js/Math i 2)))))
+
+(defn- eval-quadratic-map
+  "Evaluate Mandlebrot term"
+  [c z]
+  (plus (times z z) c))
+
+(defn- build-quadratic-map
+  "Evaluate Mandlebrot term"
+  [c]
+  (partial eval-quadratic-map c))
+
+(defn- mandelbrot-set-iterations
+   "Returns number of iterations of Mandelbrot procedure"
+   [real imaginary max-iter]
+   ;; (let [quadratic-map (build-quadratic-map (complex. real imaginary))]
+   (let [c (complex. real imaginary)]
+     (loop [x 0
+            z (complex. 0 0)]
+       (if (and
+            (< x max-iter)
+            (< (abs z) 2))
+         (do
+           ;; (println x (.-real z) (.-imag z))
+           ;; (recur (inc x) (quadratic-map z)))
+           (recur (inc x) (eval-quadratic-map c z)))
+           (list x (abs z))))))
+
+;;;;;;;;;; Public methods ;;;;;;;;;;;;
+(defn mandelbrot-set?
+  ([real imaginary]
+   (let [max-iter 200]
+     (mandelbrot-set? real imaginary max-iter)))
+  ([real imaginary max-iter]
+   ;; if the maximum number of iterations is hit, the value did not diverge
+   (= (first (mandelbrot-set-iterations real imaginary max-iter)) max-iter)))
 
 (defn newtons-method
   "Run Neton's Method for root finding until the error is less than epsilon."

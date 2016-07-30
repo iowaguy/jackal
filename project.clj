@@ -14,7 +14,9 @@
                  [compojure "1.5.0"]
                  [environ "1.0.3"]
                  [org.omcljs/om "1.0.0-alpha36"]
-                 [prismatic/dommy "1.1.0"]]
+                 [prismatic/dommy "1.1.0"]
+                 [cljs-ajax "0.5.8"]
+                 [cheshire "5.6.3"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-environ "1.0.3"]]

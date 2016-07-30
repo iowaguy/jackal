@@ -50,29 +50,26 @@
    x))
 
 ;; Mandelbrot Set functions
-(deftype complex [real imag]
-  IComplex
-  (-real [this] real)
-  (-imag [this] imag))
+(deftype complex [^double real ^double imag])
 
 (defn- plus [^complex z1 ^complex z2]
-  (let [x1 (.-real z1)
-        y1 (.-imag z1)
-        x2 (.-real z2)
-        y2 (.-imag z2)]
+  (let [x1 (double (.real z1))
+        y1 (double (.imag z1))
+        x2 (double (.real z2))
+        y2 (double (.imag z2))]
     (complex. (+ x1 x2) (+ y1 y2))))
 
 (defn- times [^complex z1 ^complex z2]
-  (let [x1 (.-real z1)
-        y1 (.-imag z1)
-        x2 (.-real z2)
-        y2 (.-imag z2)]
+  (let [x1 (double (.real z1))
+        y1 (double (.imag z1))
+        x2 (double (.real z2))
+        y2 (double (.imag z2))]
     (complex. (- (* x1 x2) (* y1 y2)) (+ (* x1 y2) (* y1 x2)))))
 
 (defn- abs [^complex z]
-  (let [r (.-real z)
-        i (.-imag z)]
-    (.sqrt js/Math (+ (.pow js/Math r 2) (.pow js/Math i 2)))))
+  (let [r (.real z)
+        i (.imag z)]
+    (Math/sqrt (+ (Math/pow r 2) (Math/pow i 2)))))
 
 (defn- eval-quadratic-map
   "Evaluate Mandlebrot term"
@@ -87,7 +84,6 @@
 (defn- mandelbrot-set-iterations
    "Returns number of iterations of Mandelbrot procedure"
    [real imaginary max-iter]
-   ;; (let [quadratic-map (build-quadratic-map (complex. real imaginary))]
    (let [c (complex. real imaginary)]
      (loop [x 0
             z (complex. 0 0)]
@@ -95,8 +91,6 @@
             (< x max-iter)
             (< (abs z) 2))
          (do
-           ;; (println x (.-real z) (.-imag z))
-           ;; (recur (inc x) (quadratic-map z)))
            (recur (inc x) (eval-quadratic-map c z)))
            (list x (abs z))))))
 
@@ -109,6 +103,7 @@
    ;; if the maximum number of iterations is hit, the value did not diverge
    (= (first (mandelbrot-set-iterations real imaginary max-iter)) max-iter)))
 
+;; Example: (numerics/newtons-method [1 0 -1] 10 0.0001)
 (defn newtons-method
   "Run Neton's Method for root finding until the error is less than epsilon."
   [func guess epsilon]

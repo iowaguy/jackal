@@ -88,17 +88,13 @@
 (defn mandelbrot-set-iterations
    "Returns number of iterations of Mandelbrot procedure"
    [real imaginary max-iter]
-   ;; (let [quadratic-map (build-quadratic-map (complex. real imaginary))]
    (let [c (complex. real imaginary)]
      (loop [x 0
             z (complex. 0 0)]
        (if (and
             (< x max-iter)
             (< (abs z) 2))
-         (do
-           ;; (println x (.-real z) (.-imag z))
-           ;; (recur (inc x) (quadratic-map z)))
-           (recur (inc x) (eval-quadratic-map c z)))
+         (recur (inc x) (eval-quadratic-map c z))
          x))))
 
 (defn mandelbrot-set?

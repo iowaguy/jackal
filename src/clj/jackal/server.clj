@@ -29,7 +29,7 @@
        {:status 200
         :headers {"Content-Type" "text/html; charset=utf-8"}
         :body (io/input-stream (io/resource "public/index.html"))})
-  (GET "/init" []
+  (GET "/coordinates" []
        {:status 200
         :headers {"Content-Type" "text/json; charset=utf-8"}
         :body (generate-string (pixel-coordinates-in-set))})

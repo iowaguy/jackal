@@ -51,8 +51,8 @@
 
 (defn fetch-mandelbrot-set
   [handler]
-  (GET "http://fractal.ben-weintraub.com/init" {:response-format :json
-                                                :handler handler}))
+  (GET "/coordinates" {:response-format :json
+                       :handler handler}))
 
 (defn main
   []

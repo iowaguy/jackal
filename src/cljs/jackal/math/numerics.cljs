@@ -84,30 +84,26 @@
   [c]
   (partial eval-quadratic-map c))
 
-(defn- mandelbrot-set-iterations
+;;;;;;;;;; Public methods ;;;;;;;;;;;;
+(defn mandelbrot-set-iterations
    "Returns number of iterations of Mandelbrot procedure"
    [real imaginary max-iter]
-   ;; (let [quadratic-map (build-quadratic-map (complex. real imaginary))]
    (let [c (complex. real imaginary)]
      (loop [x 0
             z (complex. 0 0)]
        (if (and
             (< x max-iter)
             (< (abs z) 2))
-         (do
-           ;; (println x (.-real z) (.-imag z))
-           ;; (recur (inc x) (quadratic-map z)))
-           (recur (inc x) (eval-quadratic-map c z)))
-           (list x (abs z))))))
+         (recur (inc x) (eval-quadratic-map c z))
+         x))))
 
-;;;;;;;;;; Public methods ;;;;;;;;;;;;
 (defn mandelbrot-set?
   ([real imaginary]
    (let [max-iter 200]
      (mandelbrot-set? real imaginary max-iter)))
   ([real imaginary max-iter]
    ;; if the maximum number of iterations is hit, the value did not diverge
-   (= (first (mandelbrot-set-iterations real imaginary max-iter)) max-iter)))
+   (= (mandelbrot-set-iterations real imaginary max-iter) max-iter)))
 
 (defn newtons-method
   "Run Neton's Method for root finding until the error is less than epsilon."

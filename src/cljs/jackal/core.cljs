@@ -2,7 +2,8 @@
   (:require [clojure.browser.repl :as repl]
             [jackal.math.numerics :as numerics]
             [dommy.core :as dommy :refer-macros [sel1]]
-            [quil.core :as q :include-macros true]))
+            [quil.core :as q :include-macros true]
+            [quil.middleware :as m]))
 
 
 (enable-console-print!)
@@ -37,13 +38,20 @@
      (dommy/set-attr! canvas-element :id "fractal-canvas" :width 1200 :height 750))))
 
 (defn setup []
-  (q/frame-rate 0.1) ;; frame rate set to 1 frame per 10 seconds
+  (q/frame-rate 200) ;; frame rate set to 1 frame per 10 seconds
   (q/background 255)
   (q/no-stroke)
-  (q/color-mode :hsb))
+  (q/color-mode :hsb)
+  -2)
 
-(defn draw []
-  (doseq [x (range -2 2 range-step-size)
+(defn update-state
+  [x]
+  (let [new-x (+ x 0.01)]
+    (if (> new-x 2) -2 new-x)))
+
+(defn draw
+  [old-x]
+  (doseq [x (range old-x (+ old-x 0.05) range-step-size)
           y (range -2 2 range-step-size)]
     (let [iterations (numerics/mandelbrot-set-iterations x y max-iterations)
           scaled-x (scale-pixel-coordinate x)
@@ -61,7 +69,9 @@
   :title "The Mandelbrot Set"
   :settings #(q/smooth 20) ;; Turn on anti-aliasing
   :setup setup
+  :update update-state
   :draw draw
-  :size [1200 750])
+  :size [1200 750]
+  :middleware [m/fun-mode])
 
 (println "hello world.")

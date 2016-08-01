@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Jackal by iowaguy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Jackal</h1>
+      <h2 class="project-tagline">Jackal is a tool for visualizing fractals</h2>
+      <a href="https://github.com/iowaguy/jackal" class="btn">View on GitHub</a>
+      <a href="https://github.com/iowaguy/jackal/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/iowaguy/jackal/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="jackal" class="anchor" href="#jackal" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>jackal</h1>
+
+<p>Jackal is a tool for visualizing fractal patterns.</p>
+
+<h2>
+<a id="development" class="anchor" href="#development" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Development</h2>
+
+<p>Open a terminal and type <code>lein repl</code> to start a Clojure REPL
+(interactive prompt).</p>
+
+<p>In the REPL, type</p>
+
+<div class="highlight highlight-source-clojure"><pre>(<span class="pl-en">run</span>)
+(<span class="pl-en">browser-repl</span>)</pre></div>
+
+<p>The call to <code>(run)</code> starts the Figwheel server at port 3449, which takes care of
+live reloading ClojureScript code and CSS. Figwheel's server will also act as
+your app server, so requests are correctly forwarded to the http-handler you
+define.</p>
+
+<p>Running <code>(browser-repl)</code> starts the Figwheel ClojureScript REPL. Evaluating
+expressions here will only work once you've loaded the page, so the browser can
+connect to Figwheel.</p>
+
+<p>When you see the line <code>Successfully compiled "resources/public/app.js" in 21.36
+seconds.</code>, you're ready to go. Browse to <code>http://localhost:3449</code> and enjoy.</p>
+
+<p><strong>Attention: It is not needed to run <code>lein figwheel</code> separately. Instead we
+launch Figwheel directly from the REPL</strong></p>
+
+<h2>
+<a id="trying-it-out" class="anchor" href="#trying-it-out" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Trying it out</h2>
+
+<p>If all is well you now have a browser window saying 'Hello Chestnut',
+and a REPL prompt that looks like <code>cljs.user=&gt;</code>.</p>
+
+<p>Open <code>resources/public/css/style.css</code> and change some styling of the
+H1 element. Notice how it's updated instantly in the browser.</p>
+
+<p>Open <code>src/cljs/jackal/core.cljs</code>, and change <code>dom/h1</code> to
+<code>dom/h2</code>. As soon as you save the file, your browser is updated.</p>
+
+<p>In the REPL, type</p>
+
+<pre><code>(ns jackal.core)
+(swap! app-state assoc :text "Interactivity FTW")
+</code></pre>
+
+<p>Notice again how the browser updates.</p>
+
+<h3>
+<a id="lighttable" class="anchor" href="#lighttable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Lighttable</h3>
+
+<p>Lighttable provides a tighter integration for live coding with an inline
+browser-tab. Rather than evaluating cljs on the command line with the Figwheel
+REPL, you can evaluate code and preview pages inside Lighttable.</p>
+
+<p>Steps: After running <code>(run)</code>, open a browser tab in Lighttable. Open a cljs file
+from within a project, go to the end of an s-expression and hit Cmd-ENT.
+Lighttable will ask you which client to connect. Click 'Connect a client' and
+select 'Browser'. Browse to <a href="http://localhost:3449">http://localhost:3449</a></p>
+
+<p>View LT's console to see a Chrome js console.</p>
+
+<p>Hereafter, you can save a file and see changes or evaluate cljs code (without
+saving a file).</p>
+
+<h3>
+<a id="emacscider" class="anchor" href="#emacscider" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Emacs/CIDER</h3>
+
+<p>CIDER is able to start both a Clojure and a ClojureScript REPL simultaneously,
+so you can interact both with the browser, and with the server. The command to
+do this is <code>M-x cider-jack-in-clojurescript</code>.</p>
+
+<p>We need to tell CIDER how to start a browser-connected Figwheel REPL though,
+otherwise it will use a JavaScript engine provided by the JVM, and you won't be
+able to interact with your running app.</p>
+
+<p>Put this in your Emacs configuration (<code>~/.emacs.d/init.el</code> or <code>~/.emacs</code>)</p>
+
+<div class="highlight highlight-source-lisp"><pre>(<span class="pl-c1">setq</span> cider-cljs-lein-repl
+      <span class="pl-s"><span class="pl-pds">"</span>(do (user/run)</span>
+<span class="pl-s">           (user/browser-repl))<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>Now <code>M-x cider-jack-in-clojurescript</code> (shortcut: <code>C-c M-J</code>, that's a capital
+"J", so <code>Meta-Shift-j</code>), point your browser at <code>http://localhost:3449</code>, and
+you're good to go.</p>
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>To run the Clojure tests, use</p>
+
+<div class="highlight highlight-source-shell"><pre>lein <span class="pl-c1">test</span></pre></div>
+
+<p>To run the Clojurescript you use <a href="https://github.com/bensu/doo">doo</a>. This can
+run your tests against a variety of JavaScript implementations, but in the
+browser and "headless". For example, to test with PhantomJS, use</p>
+
+<div class="highlight highlight-source-shell"><pre>lein doo phantom</pre></div>
+
+<h2>
+<a id="deploying-to-heroku" class="anchor" href="#deploying-to-heroku" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deploying to Heroku</h2>
+
+<p>This assumes you have a
+<a href="https://signup.heroku.com/dc">Heroku account</a>, have installed the
+<a href="https://toolbelt.heroku.com/">Heroku toolbelt</a>, and have done a
+<code>heroku login</code> before.</p>
+
+<div class="highlight highlight-source-shell"><pre>git init
+git add -A
+git commit
+heroku create
+git push heroku master:master
+heroku open</pre></div>
+
+<h2>
+<a id="running-with-foreman" class="anchor" href="#running-with-foreman" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running with Foreman</h2>
+
+<p>Heroku uses <a href="http://ddollar.github.io/foreman/">Foreman</a> to run your
+app, which uses the <code>Procfile</code> in your repository to figure out which
+server command to run. Heroku also compiles and runs your code with a
+Leiningen "production" profile, instead of "dev". To locally simulate
+what Heroku does you can do:</p>
+
+<div class="highlight highlight-source-shell"><pre>lein with-profile -dev,+production uberjar <span class="pl-k">&amp;&amp;</span> foreman start</pre></div>
+
+<p>Now your app is running at
+<a href="http://localhost:5000">http://localhost:5000</a> in production mode.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>Distributed under The MIT License (MIT)</p>
+
+<h2>
+<a id="chestnut" class="anchor" href="#chestnut" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Chestnut</h2>
+
+<p>Created with <a href="http://plexus.github.io/chestnut/">Chestnut</a> 0.14.0 (66af6f40).</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/iowaguy/jackal">Jackal</a> is maintained by <a href="https://github.com/iowaguy">iowaguy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>

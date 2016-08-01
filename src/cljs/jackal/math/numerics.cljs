@@ -74,6 +74,11 @@
         i (.-imag z)]
     (.sqrt js/Math (+ (.pow js/Math r 2) (.pow js/Math i 2)))))
 
+(defn- sq-vec [^complex z]
+  (let [r (.-real z)
+        i (.-imag z)]
+    (+ (.pow js/Math r 2) (.pow js/Math i 2))))
+
 (defn- eval-quadratic-map
   "Evaluate Mandlebrot term"
   [c z]
@@ -93,7 +98,7 @@
             z (complex. 0 0)]
        (if (and
             (< x max-iter)
-            (< (abs z) 2))
+            (< (sq-vec z) 4))
          (recur (inc x) (eval-quadratic-map c z))
          x))))
 

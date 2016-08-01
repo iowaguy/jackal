@@ -8,15 +8,13 @@
 
 (enable-console-print!)
 
-(def max-iterations 1000)
-
+(def max-iterations 200)
 (def scaling-factor 300)
-
 (def range-step-size 0.0025)
-
 (def pixel-offset-x 600)
-
 (def pixel-offset-y 400)
+(def range-min -2)
+(def range-max 2)
 
 (defn offset-pixel-coordinate-x
   [x]
@@ -38,38 +36,35 @@
      (dommy/set-attr! canvas-element :id "fractal-canvas" :width 1200 :height 750))))
 
 (defn setup []
-  (q/frame-rate 200) ;; frame rate set to 1 frame per 10 seconds
+  ;; (q/frame-rate 200)
   (q/background 255)
   (q/no-stroke)
-  (q/color-mode :hsb)
-  -2)
-
-(defn update-state
-  [x]
-  (let [new-x (+ x 0.01)]
-    (if (> new-x 2) -2 new-x)))
+  (q/color-mode :hsb))
 
 (defn draw
-  [old-x]
-  (doseq [x (range old-x (+ old-x 0.05) range-step-size)
-          y (range -2 2 range-step-size)]
-    (let [iterations (numerics/mandelbrot-set-iterations x y max-iterations)
-          scaled-x (scale-pixel-coordinate x)
-          scaled-y (scale-pixel-coordinate y)
-          offset-scaled-x (offset-pixel-coordinate-x scaled-x)
-          offset-scaled-y (offset-pixel-coordinate-y scaled-y)
-          col (mod (+ iterations 128) 255)]
-      (q/fill col 255 (if (= iterations max-iterations) 0 255))
-      (q/rect offset-scaled-x offset-scaled-y 0.5 0.5))))
+  []
+  (q/translate pixel-offset-x pixel-offset-y)
+  (doseq [x (range range-min range-max range-step-size)
+          y (range range-min range-max range-step-size)]
+    (let [scaled-x (q/floor (scale-pixel-coordinate x))
+          scaled-y (q/floor (scale-pixel-coordinate y))]
+      (if (and (and (> x -0.5) (< x 0.2))
+               (and (> y -0.5) (< y 0.5)))
+        (do  ;; areas that are near the center are always in the set, no need to check
+          (q/fill 0 255 0 255)
+          (q/rect scaled-x scaled-y 0.5 0.5))
+        (let [iterations (numerics/mandelbrot-set-iterations x y max-iterations)
+              col (mod (+ iterations 128) 255)]
+          (q/fill col 255 (if (= iterations max-iterations) 0 255))
+          (q/rect scaled-x scaled-y 0.5 0.5)
+          )))))
 
 (add-canvas)
 
 (q/defsketch mandlebrot-set
   :host "fractal-canvas"
   :title "The Mandelbrot Set"
-  :settings #(q/smooth 20) ;; Turn on anti-aliasing
   :setup setup
-  :update update-state
   :draw draw
   :size [1200 750]
   :middleware [m/fun-mode])

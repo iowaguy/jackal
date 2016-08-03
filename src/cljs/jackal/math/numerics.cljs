@@ -49,58 +49,20 @@
    (differentiate func)
    x))
 
-;; Mandelbrot Set functions
-(deftype complex [real imag]
-  IComplex
-  (-real [this] real)
-  (-imag [this] imag))
-
-(defn- plus [^complex z1 ^complex z2]
-  (let [x1 (.-real z1)
-        y1 (.-imag z1)
-        x2 (.-real z2)
-        y2 (.-imag z2)]
-    (complex. (+ x1 x2) (+ y1 y2))))
-
-(defn- times [^complex z1 ^complex z2]
-  (let [x1 (.-real z1)
-        y1 (.-imag z1)
-        x2 (.-real z2)
-        y2 (.-imag z2)]
-    (complex. (- (* x1 x2) (* y1 y2)) (+ (* x1 y2) (* y1 x2)))))
-
-(defn- abs [^complex z]
-  (let [r (.-real z)
-        i (.-imag z)]
-    (.sqrt js/Math (+ (.pow js/Math r 2) (.pow js/Math i 2)))))
-
-(defn- sq-vec [^complex z]
-  (let [r (.-real z)
-        i (.-imag z)]
-    (+ (.pow js/Math r 2) (.pow js/Math i 2))))
-
-(defn- eval-quadratic-map
-  "Evaluate Mandlebrot term"
-  [c z]
-  (plus (times z z) c))
-
-(defn- build-quadratic-map
-  "Evaluate Mandlebrot term"
-  [c]
-  (partial eval-quadratic-map c))
-
 ;;;;;;;;;; Public methods ;;;;;;;;;;;;
 (defn mandelbrot-set-iterations
    "Returns number of iterations of Mandelbrot procedure"
    [real imaginary max-iter]
-   (let [c (complex. real imaginary)]
-     (loop [x 0
-            z (complex. 0 0)]
-       (if (and
-            (< x max-iter)
-            (< (sq-vec z) 4))
-         (recur (inc x) (eval-quadratic-map c z))
-         x))))
+  (loop [x 0
+         r 0
+         i 0]
+    (if (and
+         (< x max-iter)
+         (< (+ (* r r) (* i i)) 4))
+      (recur (inc x)
+             (+ real (- (* r r) (* i i)))
+             (+ imaginary (+ (* r i) (* r i))))
+      x)))
 
 (defn mandelbrot-set?
   ([real imaginary]

@@ -56,8 +56,7 @@
         (let [iterations (numerics/mandelbrot-set-iterations x y max-iterations)
               col (mod (+ iterations 128) 255)]
           (q/fill col 255 (if (= iterations max-iterations) 0 255))
-          (q/rect scaled-x scaled-y 0.5 0.5)
-          )))))
+          (q/rect scaled-x scaled-y 0.5 0.5))))))
 
 (add-canvas)
 

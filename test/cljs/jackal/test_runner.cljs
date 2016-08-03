@@ -1,4 +1,5 @@
 (ns jackal.test-runner
+  (:refer-clojure :exclude [println])
   (:require
    [doo.runner :refer-macros [doo-tests]]
    [jackal.core-test]

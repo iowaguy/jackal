@@ -1,4 +1,5 @@
 (ns jackal.math.numerics)
+  ;; (:require [jackal.common :refer-macros [mandelbrot-set-iterations]]))
 
 ;; Newton's Method functions
 (defn- y-intercept
@@ -51,18 +52,32 @@
 
 ;;;;;;;;;; Public methods ;;;;;;;;;;;;
 (defn mandelbrot-set-iterations
-   "Returns number of iterations of Mandelbrot procedure"
-   [real imaginary max-iter]
+  "Returns number of iterations of Mandelbrot procedure"
+  [real imaginary max-iter]
   (loop [x 0
          r 0
          i 0]
     (if (and
          (< x max-iter)
-         (< (+ (* r r) (* i i)) 4))
+         (< (+ (* r r) (* i i)) 4.0))
       (recur (inc x)
              (+ real (- (* r r) (* i i)))
              (+ imaginary (+ (* r i) (* r i))))
       x)))
+
+;; (defmacro mandelbrot-set-iterations
+;;   "Returns number of iterations of Mandelbrot procedure. This is a macro for performances reasons."
+;;   [real imaginary max-iter]
+;;   `(loop [x# 0
+;;           r# 0
+;;           i# 0]
+;;        (if (and
+;;             (< x# ~max-iter)
+;;             (< (+ (* r# r#) (* i# i#)) 4.0))
+;;          (recur (inc x#)
+;;                 (+ ~real (- (* r# r#) (* i# i#)))
+;;                 (+ ~imaginary (+ (* r# i#) (* r# i#))))
+;;          x#)))
 
 (defn mandelbrot-set?
   ([real imaginary]

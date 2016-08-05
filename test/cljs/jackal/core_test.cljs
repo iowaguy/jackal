@@ -8,6 +8,9 @@
 (deftest mandelbrot-set-negative-test
   (is (not (numerics/mandelbrot-set? 1 1 1000))))
 
-(simple-benchmark [x 0 y 0 i 1000] (numerics/mandelbrot-set? x y i) 1000)
-(simple-benchmark [x 0 y 0 i 1000] (numerics/mandelbrot-set? x y i) 10000)
-(simple-benchmark [x 0 y 0 i 1000] (numerics/mandelbrot-set? x y i) 100000)
+(simple-benchmark [x 0 y 0 i 1000] (numerics/mandelbrot-set-iterations x y i) 1000)
+(simple-benchmark [x 0 y 0 i 1000] (numerics/mandelbrot-set-iterations x y i) 10000)
+(simple-benchmark [x 0 y 0 i 1000] (numerics/mandelbrot-set-iterations x y i) 100000)
+
+;; actual number of points in full screen
+(simple-benchmark [x 0 y 0 i 1000] (numerics/mandelbrot-set-iterations x y i) 2560000)

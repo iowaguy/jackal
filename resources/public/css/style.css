@@ -1,3 +1,8 @@
 h1 {
   text-decoration: underline;
 }
+
+body {
+    margin: 0;
+    text-align: center;
+}

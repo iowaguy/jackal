@@ -20,7 +20,7 @@
 (def pixel-offset-x (/ screen-width 2))
 (def pixel-offset-y (/ screen-height 2))
 (def canvas-name "fractal-canvas")
-(def zoom-factor 2)
+(def zoom-factor 4)
 
 (defn offset-pixel-coordinate-x
   [x]
@@ -81,8 +81,8 @@
         (assoc :ymax new-max-y)
         (assoc :scale new-scale)
         (update :step #(/ 1 new-scale))
-        (update :x-offset #(- pixel-offset-x (* 2 (- (:x event) %))))
-        (update :y-offset #(- pixel-offset-y (* 2 (- (:y event) %)))))))
+        (update :x-offset #(- pixel-offset-x (* zoom-factor (- (:x event) %))))
+        (update :y-offset #(- pixel-offset-y (* zoom-factor (- (:y event) %)))))))
 
 (defn draw
   [state]

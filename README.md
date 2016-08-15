@@ -1,6 +1,34 @@
-# jackal
+# Jackal
+View demo on [my website](fractal.ben-weintraub.com).
 
-Jackal is a tool for visualizing fractal patterns.
+"Of all the possible pathways of disorder, nature favors just a few" touted James Gleick in [Chaos: Making a New Science](https://smile.amazon.com/dp/B004Q3RRPI/ref=dp-kindle-redirect?_encoding=UTF8&btkr=1#nav-subnav). The introduction of Chaos Theory into the world of deterministic science shattered previous conceptions of what science should be, and spawned the entire discipline of Dynamic/Complex Systems as a subfield in nearly all of the hard sciences. This project is not an effort to break new ground, but an effort to glean a visceral understanding of one key facet of Chaos Theory, and share what I have learned.
+
+## The Mandelbrot Set
+Known colloquially as "God's Thumbprint", The Mandelbrot Set is a beautiful intersection of rigorous mathematics and unconstrained art. This project (and several others) display it as a graph on the complex plane representing the inclusivity of complex coordinates in a set defined by a specific mathematical function. That function is:
+```
+Z = Z^2 + Ci
+```
+This is a recursive function, which means it is expected to be run more than once, and one iteration's output is used as the next iteration's input. A point, represented by ```Ci``` in the equation above can be said to be in the Mandelbrot Set if, and only if, after an arbitrary number of iterations, it has not diverged towards infinity. In this project, that number of iterations has been hard-coded to 50. For most points, it can never be know with certainty whether or not they are in the set; after a 1,000,000 iterations it may not have diverged, but it still might do so on the 1,000,001st. This is where Chaos comes into the picture, because despite some semblance of a pattern when graphed on the complex plane, there is no algorithm or heuristic that quickly predicts whether or not a point is in the set other than running the recursive function. This inherent unpredictability explains why the graph contains such jagged edges. These jagged edges however, are not just random perterbations. They are a display of a property called *self similarity*; this is the notion that if one were to zoom in on a small section of the graph, one would see a shape that is similar (though not exactly the same) as the entire graph--no matter how far one zooms in, the graph never becomes smooth. This roughness, maintained ad infinitum, even under arbitratily large magnification. It can be easily shown, however, that points sufficiently far from the origin diverge quickly enough to be know, for certain, *not* to be in the set. This implies that the Mandelbot Set has a bounded area, but an *infinitely* long perimiter!
+
+### How to know if a point is in the set
+The case of the Mandelbrot Set, Z is initialized to ```0 + 0i```, and C is a constant complex number representing one coordinate on the complex plane. 
+
+## Background
+
+#### What is a set?
+In math and computer science, a set is a collection or grouping with no repeating elements. For example, the Harry Potter series is a set of size seven, it has exactly seven books; if you were to go to a library and look at their Harry Potter section, you might see that they have one hundred copies, but the set size remains constant at seven.
+
+#### Who is Mandelbrot?
+[Benoit Mandelbrot] was a Mathmatician and Renaissance man known for his discovery of the interesting properties of the eponymous Mandelbrot Set. He had many careers in which he contributed valuable breakthrough; his careers ran the gamut of engineering at IBM, teaching as a professor of mathematics at Harvard, doing economics research, and several others.
+
+## Discussion
+Though certainly beautiful to look at, the Mandelbrot Set gained its academic fame for the interesting attributes it holds, and those which it shares with other so-called fractals ([a word coined by Mandelbrot](http://www-03.ibm.com/ibm/history/ibm100/us/en/icons/fractal/)). One such property is  
+
+# Implementation
+### Escape criterion
+In practice, it is useful to know as early as possible when a value is diverging.... this project uses an escape radius of 4....There is nothing intrinsically special about the number fifty. It was chosen for purely utilitarian reasons, namely: it projects an aesthetically pleasing graph, without drowning the CPU (and causing long load times).
+
+## Why is it called Jackal?
 
 ## Development
 

@@ -1,36 +1,43 @@
 # Jackal
-View demo on [my website](fractal.ben-weintraub.com).
+[Running demo](fractal.ben-weintraub.com).
 
 "Of all the possible pathways of disorder, nature favors just a few" touted James Gleick in [Chaos: Making a New Science](https://smile.amazon.com/dp/B004Q3RRPI/ref=dp-kindle-redirect?_encoding=UTF8&btkr=1#nav-subnav). The introduction of Chaos Theory into the world of deterministic science shattered previous conceptions of what science should be, and spawned the entire discipline of Dynamic/Complex Systems as a subfield in nearly all of the hard sciences. This project is not an effort to break new ground, but an effort to glean a visceral understanding of one key facet of Chaos Theory, and share what I have learned.
 
 ## The Mandelbrot Set
-Known colloquially as "God's Thumbprint", The Mandelbrot Set is a beautiful intersection of rigorous mathematics and unconstrained art. This project (and several others) display it as a graph on the complex plane representing the inclusivity of complex coordinates in a set defined by a specific mathematical function. That function is:
+Known colloquially as "God's Thumbprint", The Mandelbrot Set is a beautiful intersection of rigorous mathematics and unconstrained art. The Mandelbrot Set is one example of a type of pattern known as a factal; other examples include: the Julia Set, [the Sierpinski Gasket, and von Koch Snowflake](http://world.mathigon.org/Fractals). This project displays it as a graph on the complex plane representing the inclusivity of complex coordinates in a set defined by a specific mathematical function. That function is:
 ```
 Z = Z^2 + Ci
 ```
-This is a recursive function, which means it is expected to be run more than once, and one iteration's output is used as the next iteration's input. A point, represented by ```Ci``` in the equation above can be said to be in the Mandelbrot Set if, and only if, after an arbitrary number of iterations, it has not diverged towards infinity. In this project, that number of iterations has been hard-coded to 50. For most points, it can never be know with certainty whether or not they are in the set; after a 1,000,000 iterations it may not have diverged, but it still might do so on the 1,000,001st. This is where Chaos comes into the picture, because despite some semblance of a pattern when graphed on the complex plane, there is no algorithm or heuristic that quickly predicts whether or not a point is in the set other than running the recursive function. This inherent unpredictability explains why the graph contains such jagged edges. These jagged edges however, are not just random perterbations. They are a display of a property called *self similarity*; this is the notion that if one were to zoom in on a small section of the graph, one would see a shape that is similar (though not exactly the same) as the entire graph--no matter how far one zooms in, the graph never becomes smooth. This roughness, maintained ad infinitum, even under arbitratily large magnification. It can be easily shown, however, that points sufficiently far from the origin diverge quickly enough to be know, for certain, *not* to be in the set. This implies that the Mandelbot Set has a bounded area, but an *infinitely* long perimiter!
+This is a recursive function, which means it is expected to be run more than once, and one iteration's output is used as the next iteration's input. A point, represented by ```Ci``` in the equation above can be said to be in the Mandelbrot Set if, and only if, after an arbitrary number of iterations, it has not diverged towards infinity. For most points--exluding (0,0)--it can never be know with certainty whether or not they are in the set; after a 1,000,000 iterations it may not have diverged, but it still might do so on the 1,000,001st. This is where chaos comes into the picture, because despite some semblance of a pattern when graphed on the complex plane, there is no algorithm or heuristic that quickly predicts whether or not a point is in the set other than running the recursive function. This inherent unpredictability explains why the graph contains such jagged edges. These jagged edges however, are not just random perterbations. They are a display of a property called *self similarity*; this is the notion that if one were to zoom in on a small section of the graph, one would see a shape that is similar (though not exactly the same) as the graph as a whole--no matter how far one zooms in, the graph never becomes smooth. This roughness is maintained ad infinitum even under arbitratily large magnification. It can be easily shown, however, that points sufficiently far from the origin (i.e. outside of some radius) diverge quickly enough to be know, for certain, *not* to be in the set. This fact, along with self-similary, implies that the Mandelbot Set has a bounded area, but an *infinitely* long perimiter!
 
 ### How to know if a point is in the set
-The case of the Mandelbrot Set, Z is initialized to ```0 + 0i```, and C is a constant complex number representing one coordinate on the complex plane. 
+Z, from the equation above, is initialized to ```0 + 0i```, and C is a constant complex number representing a point's coordinate on the complex plane. The recursive function is then run until the abitrary limit is reached, or the length of vector Z has diverged towards infinity.
 
-## Background
-
-#### What is a set?
-In math and computer science, a set is a collection or grouping with no repeating elements. For example, the Harry Potter series is a set of size seven, it has exactly seven books; if you were to go to a library and look at their Harry Potter section, you might see that they have one hundred copies, but the set size remains constant at seven.
-
-#### Who is Mandelbrot?
-[Benoit Mandelbrot] was a Mathmatician and Renaissance man known for his discovery of the interesting properties of the eponymous Mandelbrot Set. He had many careers in which he contributed valuable breakthrough; his careers ran the gamut of engineering at IBM, teaching as a professor of mathematics at Harvard, doing economics research, and several others.
-
-## Discussion
-Though certainly beautiful to look at, the Mandelbrot Set gained its academic fame for the interesting attributes it holds, and those which it shares with other so-called fractals ([a word coined by Mandelbrot](http://www-03.ibm.com/ibm/history/ibm100/us/en/icons/fractal/)). One such property is  
+### Who is Mandelbrot?
+[Benoit Mandelbrot](https://en.wikipedia.org/wiki/Benoit_Mandelbrot) was a Mathmatician and Renaissance man known for his discovery of the interesting properties of the eponymous Mandelbrot Set. He had many careers in which he was known for valuable contributions; his careers included engineering at IBM, being a professor of mathematics at Harvard, doing economics research, and several others. He also coined the word [fractal](http://www-03.ibm.com/ibm/history/ibm100/us/en/icons/fractal/).
 
 # Implementation
+One key differentiator of this project from others is the choice of languages it was written in. [Clojure/ClojureScript](https://clojure.org/) were chosen because of their practical mix of [Functional Programming](https://en.wikipedia.org/wiki/Functional_programming) and useability. Clojure is in the LISP family of languages of which the poignant feature is the ability to treat code as data, resulting in constructs known as macros which are [useful for an abundance of reasons](http://stackoverflow.com/questions/267862/what-makes-lisp-macros-so-special).
+
+## Visualization
+The [Quil library](http://quil.info/) was used for visualization and event handling. The library is based on ProcessingJS, so much of its code is highly optimized. One issue I ran into though, was the performance of the ```fill``` command. In a project like this, ```fill``` needs to be called for every single pixel, and after using Chrome's built-in profiler, that function call was determined to be very costly.
+
+## Performance
+Optimizing performance turned out to be the biggest challenge in this project. The initial development included highly functional code (no state or mutability), but when performance improvements needed to be made, it was uncovered through targeted benchmarking that the frequent function calls, as well as the creation and addition to lists had a severe performance impact. Functions which generated data to be fed through a transformation pipeline were replaced by ```doseq``` which is an iterator that does not return a list of values, only ```nil```. The Mandelbrot recusion itself had to be pared down to its bare minimum as well, the process of which taxed the readability of the "numerics" namespace. This was necessary , however, because when iterating over every pixel on the screen and doing a deep recursion on each one, the overhead of any single operation can grow quickly.
+
 ### Escape criterion
-In practice, it is useful to know as early as possible when a value is diverging.... this project uses an escape radius of 4....There is nothing intrinsically special about the number fifty. It was chosen for purely utilitarian reasons, namely: it projects an aesthetically pleasing graph, without drowning the CPU (and causing long load times).
+#### Iterations
+In this project, that number of iterations for the Mandelbrot function has been hard-coded to 50. Using more would broaden the range of colors displayed, but can quickly become unreasonably expensive--whatever iteration count is chosen, must be run for *every pixel on the screen*.
+
+#### Escape radius
+In practice, it is useful to know as early as possible when a value is diverging. Usually, if the absolute value of vector Z has exceeded 2, it will continue to diverge. So, with this in mind, 2 was used as the escape radius. However, you'll notice that 4 is actuall used blah blah..... this project uses an escape radius of 4....There is nothing intrinsically special about the number fifty. It was chosen for purely utilitarian reasons, namely: it projects an aesthetically pleasing graph, without drowning the CPU (and causing long load times).
+
+## Future work
+The improvement which stands out as most salient is certainly the performance. A refactoring of the visualization code so that RBG values are directly inserted into the JavaScrtipt VM's ImageData array rather than relying on Quil's ```fill``` command is likely to offer a substantial gain. It might also be a psychological boon to render each line, one at a time, to show progress.
 
 ## Why is it called Jackal?
 
-## Development
+# Development
 
 Open a terminal and type `lein repl` to start a Clojure REPL
 (interactive prompt).

@@ -2,7 +2,7 @@
 
 # Jackal
 
-The introduction of Chaos Theory into the world of deterministic science shattered previous conceptions of what science should be, and spawned the entire discipline of Dynamic/Complex Systems as a subfield in nearly all of the hard sciences. This project is not an effort to break new ground, but to glean a visceral understanding of one key facet of Chaos Theory, and share what I have learned.
+The introduction of [Chaos Theory](https://en.wikipedia.org/wiki/Chaos_Theory) into the world of deterministic science shattered previous conceptions of what science should be, and spawned the entire discipline of Dynamic/Complex Systems as a subfield in nearly all of the hard sciences. This project is not an effort to break new ground, but to glean a visceral understanding of one key facet of Chaos Theory, and share what I have learned.
 
 ## The Mandelbrot Set
 Known colloquially as "God's Thumbprint", The Mandelbrot Set is a beautiful intersection of rigorous mathematics and unconstrained art. The Mandelbrot Set is one example of a type of pattern known as a factal; other examples include: the Julia Set, [the Sierpinski Gasket, and von Koch Snowflake](http://world.mathigon.org/Fractals). This project displays it as a graph on the complex plane representing the inclusivity of complex coordinates in a set defined by a specific mathematical function. That function is:
